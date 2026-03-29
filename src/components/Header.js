@@ -32,11 +32,9 @@ const Header = () => {
       
       if (user) {
 
-        // const user = auth.currentUser;
-        console.log(36,user.photoURL);
+        // const user = auth.currentUser
                 
         const {uid,email,displayName,photoURL} = auth.currentUser;
-        console.log(uid,"/n",email,"/n",displayName,"/n",photoURL);
         
         dispatch(addUser({uid,email,displayName,photoURL}));
         
@@ -54,7 +52,8 @@ const Header = () => {
     // it is a cleanup function , and it is property of useEffect,whenever component unmounts , the return function will be called.
     return ()=>unsubscribe();
   
-  },[]);
+  },[dispatch, navigate]);
+  
   return (
     <div className="absolute w-screen px-8 py-2 bg-gradient-to-b from-black z-10 flex justify-between">
       
