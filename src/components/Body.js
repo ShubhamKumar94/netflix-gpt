@@ -16,27 +16,7 @@ const Body = () => {
     }
   ]);
 
-  // useEffect(()=>{
-    
-  //   onAuthStateChanged(auth, (user) => {
-      
-  //     if (user) {
-        
-  //       const {uid,email,displayName} = user;
-
-  //       dispatch(addUser({uid,email,displayName}));
-
-  //       console.log("auth state change");
-        
-  //     } else {
-
-  //       dispatch(addUser());
-  //       // User is signed out
-  //       // ...
-  //     }
-  //   });
   
-  // },[]);
   
   return (
     <div>

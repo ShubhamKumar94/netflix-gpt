@@ -1,28 +1,64 @@
-import { signOut } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import { useEffect } from "react";
+import {LOGO} from "../utils/constants";
 const Header = () => {
+  
   const navigate = useNavigate();
+  
   const dispatch = useDispatch();
+  
   const user = useSelector(store => store.user)
+  
   function signOutFun(){
 
     signOut(auth).then(() => {
       // Sign-out successful.
       dispatch(addUser(null));
-      navigate("/");
+      // navigate("/");
     }).catch((error) => {
       // An error happened.
       console.log("An error happened while login");
       
     });
-  }  
+  }
+  
+  useEffect(()=>{
+    // unsubscribe is a function whenver it will be called the event that we have subscribed,it should be remove from the browser. 
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      
+      if (user) {
+
+        // const user = auth.currentUser;
+        console.log(36,user.photoURL);
+                
+        const {uid,email,displayName,photoURL} = auth.currentUser;
+        console.log(uid,"/n",email,"/n",displayName,"/n",photoURL);
+        
+        dispatch(addUser({uid,email,displayName,photoURL}));
+        
+        navigate("/browse");
+        
+      } else {
+
+        dispatch(addUser());
+        
+        navigate("/");
+        // User is signed out
+        // ...
+      }
+    });
+    // it is a cleanup function , and it is property of useEffect,whenever component unmounts , the return function will be called.
+    return ()=>unsubscribe();
+  
+  },[]);
   return (
     <div className="absolute w-screen px-8 py-2 bg-gradient-to-b from-black z-10 flex justify-between">
       
-      <img src = "https://help.nflxext.com/helpcenter/OneTrust/oneTrust_production_2026-02-12/consent/87b6a5c0-0104-4e96-a291-092c11350111/019ae4b5-d8fb-7693-90ba-7a61d24a8837/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png" alt = "logo" className="w-44"/>
+      <img src = {LOGO} alt = "logo" className="w-44"/>
 
       {user && <div className="flex p-2">
         <img src = {user.photoURL} alt = "usericon" className="w-10 h-10 rounded-lg">

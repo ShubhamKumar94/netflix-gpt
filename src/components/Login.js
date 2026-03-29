@@ -6,6 +6,7 @@ import {auth} from '../utils/firebase';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../utils/userSlice';
+import {USER_AVATAR} from '../utils/constants';
 
 
 const Login = () => {
@@ -40,12 +41,14 @@ const Login = () => {
           const user = userCredential.user;
         
           updateProfile(user, {
-            displayName: name.current.value, photoURL: "https://media.licdn.com/dms/image/v2/C4D03AQGhQaOkPG57wQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1657693452703?e=1776297600&v=beta&t=d-N3g4LipOyWnV8hAf-n6tlcvh0YbifSvH9PHhS5090"
+            displayName: name.current.value, photoURL:USER_AVATAR
           }).then(() => {
 
-            console.log(user.email);
-            dispatch(addUser({uid:user.uid,email:user.email,displayName:user.displayName,photoURL:"https://media.licdn.com/dms/image/v2/C4D03AQGhQaOkPG57wQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1657693452703?e=1776297600&v=beta&t=d-N3g4LipOyWnV8hAf-n6tlcvh0YbifSvH9PHhS5090"}));
-            navigate("/browse");
+            const user = auth.currentUser;
+            console.log(48,user);
+            
+            dispatch(addUser({uid:user.uid,email:user.email,displayName:user.displayName,photoURL:user.photoURL}));
+            // navigate("/browse");
             // Profile updated!
             // ...
           }).catch((error) => {
@@ -78,9 +81,10 @@ const Login = () => {
         .then((userCredential) => {
           // Signed in 
           const user = userCredential.user;
-
+          // console.log(auth.currentUser);
+          
           dispatch(addUser({uid:user.uid,email:user.email,displayName:user.displayName,photoURL:user.photoURL}));
-          navigate("/browse");
+          // navigate("/browse");
          
           // ...
         })
