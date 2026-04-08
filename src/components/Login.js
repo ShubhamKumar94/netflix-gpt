@@ -5,7 +5,7 @@ import { createUserWithEmailAndPassword,signInWithEmailAndPassword,updateProfile
 import {auth} from '../utils/firebase';
 import { useDispatch } from 'react-redux';
 import { addUser } from '../utils/userSlice';
-import {USER_AVATAR} from '../utils/constants';
+import {BG_URL, USER_AVATAR} from '../utils/constants';
 
 
 const Login = () => {
@@ -42,8 +42,7 @@ const Login = () => {
           }).then(() => {
 
             const user = auth.currentUser;
-            console.log(48,user);
-            
+
             dispatch(addUser({uid:user.uid,email:user.email,displayName:user.displayName,photoURL:user.photoURL}));
             // navigate("/browse");
             // Profile updated!
@@ -62,8 +61,6 @@ const Login = () => {
         .catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
-          console.log(errorMessage);
-          
           setErrorMessage(errorCode+"-"+errorMessage);
           // ..
         });
@@ -78,7 +75,7 @@ const Login = () => {
         .then((userCredential) => {
           // Signed in 
           const user = userCredential.user;
-          // console.log(auth.currentUser);
+          
           
           dispatch(addUser({uid:user.uid,email:user.email,displayName:user.displayName,photoURL:user.photoURL}));
           // navigate("/browse");
@@ -107,9 +104,9 @@ const Login = () => {
     <div>
       <Header/>
       <div className='absolute'>
-        <img src = "https://assets.nflxext.com/ffe/siteui/vlv3/7ea4545e-42d3-4ebf-82fd-0e1984dc6375/web/IN-en-20260316-TRIFECTA-perspective_789c5633-3949-4708-8e6c-8ddfd22ed696_small.jpg" alt = "background-img"></img>
+        <img src = {BG_URL} alt = "background-img" className='h-screen w-screen object-cover'></img>
       </div>
-      <form className='bg-black absolute w-3/12 my-36 mx-auto right-0 left-0 text-white p-8 rounded-lg bg-opacity-80' onSubmit={e=>e.preventDefault()}>
+      <form className='bg-black absolute w-full md:w-3/12  my-36 md:mx-auto right-0 left-0 text-white p-8 rounded-lg bg-opacity-80' onSubmit={e=>e.preventDefault()}>
         <h1 className='font-bold text-3xl py-4'>{isSignInForm ? "Sign In" : "Sign Up"}</h1>
         {!isSignInForm && <input ref = {name} type="text" placeholder='Full Name' className='p-4 my-4 w-full bg-gray-700 rounded-sm'/>}
         <input ref={email} type="text" placeholder='Email Address' className='p-4 my-4 w-full bg-gray-700 rounded-sm'/>
